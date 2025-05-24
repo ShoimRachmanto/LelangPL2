@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Lelang PL2</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .judul {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      color: #6c757d;
+    }
+    .tanggal-hariini {
+      text-align: center;
+      color: #6c757d;
+      margin-bottom: 20px;
+    }
+    .table-wrapper {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    table {
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="judul" id="judul"></div>
+    <div class="tanggal-hariini" id="hari-ini"></div>
+    <div class="table-wrapper">
+      <table class="table table-striped table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Hari</th>
+            <th scope="col">Tanggal</th>
+            <th scope="col">Pemohon</th>
+            <th scope="col">Pejabat Lelang</th>
+          </tr>
+        </thead>
+        <tbody id="tabel-lelang">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function getHari(dateStr) {
+      const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const date = new Date(dateStr);
+      return hari[date.getDay()];
+    }
+
+    function tampilkanHariIni() {
+      const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const now = new Date();
+      const hariIni = hari[now.getDay()];
+      const tanggal = now.toISOString().slice(0, 10);
+      document.getElementById("hari-ini").innerText = `Hari ini ${hariIni} tanggal ${tanggal}`;
+    }
+
+    tampilkanHariIni();
+
+    fetch("data/jadwal_lelang_pl2.json")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("judul").innerText = data.judul;
+        const tbody = document.getElementById("tabel-lelang");
+        data.data.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${getHari(item.tanggal)}</td>
+            <td>${item.tanggal}</td>
+            <td>${item.pemohon}</td>
+            <td>${item.pejabat_lelang}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        document.getElementById("judul").innerText = "Gagal memuat data lelang.";
+        console.error("Error loading JSON:", error);
+      });
+  </script>
+</body>
+</html>

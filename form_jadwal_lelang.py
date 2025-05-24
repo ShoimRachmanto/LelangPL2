@@ -1,35 +1,21 @@
 import sys
 import sqlite3
+import json
 import csv
+import subprocess
+import os
+from datetime import datetime
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem,
     QTextEdit, QDateEdit, QMessageBox
 )
 from PyQt5.QtCore import QDate, Qt, QDateTime
-from PyQt5.QtGui import QFont
 
 DB_NAME = 'lelang-pl2.db'
 TABLE_NAME = 'jadwal_lelang'
+OUTPUT_FILE = 'data/jadwal_lelang_pl2.json'
 
-# === Inisialisasi DB ===
-def init_db():
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute(f'''
-        CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pejabat_lelang TEXT,
-            tanggal TEXT,
-            pemohon TEXT,
-            timestamp_created TEXT,
-            timestamp_updated TEXT
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-# === GUI ===
 class LelangForm(QWidget):
     def __init__(self):
         super().__init__()
@@ -43,16 +29,12 @@ class LelangForm(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # --- Form Input ---
         form_layout = QHBoxLayout()
-
         self.input_pejabat = QLineEdit()
-        self.input_pejabat.setPlaceholderText("Pejabat Lelang")
         self.input_tanggal = QDateEdit(QDate.currentDate())
         self.input_tanggal.setCalendarPopup(True)
         self.input_tanggal.setDisplayFormat("yyyy-MM-dd")
         self.input_pemohon = QTextEdit()
-        self.input_pemohon.setPlaceholderText("Pemohon")
         self.input_pemohon.setFixedHeight(50)
 
         form_layout.addWidget(QLabel("Pejabat:"))
@@ -61,45 +43,39 @@ class LelangForm(QWidget):
         form_layout.addWidget(self.input_tanggal)
         form_layout.addWidget(QLabel("Pemohon:"))
         form_layout.addWidget(self.input_pemohon)
-
         layout.addLayout(form_layout)
 
-        # --- Tombol ---
         button_layout = QHBoxLayout()
-
         self.btn_add = QPushButton("Tambah")
         self.btn_update = QPushButton("Update")
         self.btn_delete = QPushButton("Hapus")
         self.btn_clear = QPushButton("Bersihkan")
-        self.btn_export = QPushButton("Export ke Excel")
+        self.btn_export_excel = QPushButton("Export ke Excel")
+        self.btn_export_push = QPushButton("Export & Push JSON")
 
         self.btn_add.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
         self.btn_update.setStyleSheet("background-color: #2196F3; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
         self.btn_delete.setStyleSheet("background-color: #F44336; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
         self.btn_clear.setStyleSheet("background-color: #FFEB3B; color: black; font-weight: bold; padding: 5px; border-radius: 5px;")
-        self.btn_export.setStyleSheet("background-color: #9C27B0; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
+        self.btn_export_excel.setStyleSheet("background-color: #9C27B0; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
+        self.btn_export_push.setStyleSheet("background-color: #6A1B9A; color: white; font-weight: bold; padding: 5px; border-radius: 5px;")
 
         self.btn_add.clicked.connect(self.add_entry)
         self.btn_update.clicked.connect(self.update_entry)
         self.btn_delete.clicked.connect(self.delete_entry)
         self.btn_clear.clicked.connect(self.clear_form)
-        self.btn_export.clicked.connect(self.export_to_excel)
+        self.btn_export_excel.clicked.connect(self.export_to_excel)
+        self.btn_export_push.clicked.connect(self.export_and_push)
 
-        for btn in [self.btn_add, self.btn_update, self.btn_delete, self.btn_clear, self.btn_export]:
+        for btn in [self.btn_add, self.btn_update, self.btn_delete, self.btn_clear, self.btn_export_excel, self.btn_export_push]:
             button_layout.addWidget(btn)
 
         layout.addLayout(button_layout)
 
-        # --- Tabel ---
         self.table = QTableWidget()
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(["Pejabat", "Tanggal", "Pemohon"])
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setAlternatingRowColors(True)
-        self.table.horizontalHeader().setStretchLastSection(True)
-        self.table.horizontalHeader().setSectionResizeMode(0, 1)  # Resize first column to contents
-        self.table.horizontalHeader().setSectionResizeMode(1, 1)
-        self.table.horizontalHeader().setSectionResizeMode(2, 1)
         self.table.cellClicked.connect(self.fill_form_from_table)
         layout.addWidget(self.table)
 
@@ -116,7 +92,7 @@ class LelangForm(QWidget):
         for row in rows:
             row_num = self.table.rowCount()
             self.table.insertRow(row_num)
-            for col, val in enumerate(row[1:]):  # skip id when displaying
+            for col, val in enumerate(row[1:]):
                 self.table.setItem(row_num, col, QTableWidgetItem(str(val)))
 
     def add_entry(self):
@@ -131,9 +107,7 @@ class LelangForm(QWidget):
 
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        c.execute(f"""
-            INSERT INTO {TABLE_NAME} (pejabat_lelang, tanggal, pemohon, timestamp_created, timestamp_updated)
-            VALUES (?, ?, ?, ?, ?)""", (pejabat, tanggal, pemohon, now, now))
+        c.execute(f"INSERT INTO {TABLE_NAME} (pejabat_lelang, tanggal, pemohon, timestamp_created, timestamp_updated) VALUES (?, ?, ?, ?, ?)", (pejabat, tanggal, pemohon, now, now))
         conn.commit()
         conn.close()
 
@@ -152,14 +126,7 @@ class LelangForm(QWidget):
 
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        c.execute(f"""
-            UPDATE {TABLE_NAME} SET
-                pejabat_lelang = ?,
-                tanggal = ?,
-                pemohon = ?,
-                timestamp_updated = ?
-            WHERE id = ?
-        """, (pejabat, tanggal, pemohon, now, self.selected_id))
+        c.execute(f"UPDATE {TABLE_NAME} SET pejabat_lelang = ?, tanggal = ?, pemohon = ?, timestamp_updated = ? WHERE id = ?", (pejabat, tanggal, pemohon, now, self.selected_id))
         conn.commit()
         conn.close()
 
@@ -193,8 +160,7 @@ class LelangForm(QWidget):
         tanggal = self.table.item(row, 1).text()
         pejabat = self.table.item(row, 0).text()
         pemohon = self.table.item(row, 2).text()
-        c.execute(f"SELECT id FROM {TABLE_NAME} WHERE pejabat_lelang = ? AND tanggal = ? AND pemohon = ? LIMIT 1",
-                  (pejabat, tanggal, pemohon))
+        c.execute(f"SELECT id FROM {TABLE_NAME} WHERE pejabat_lelang = ? AND tanggal = ? AND pemohon = ? LIMIT 1", (pejabat, tanggal, pemohon))
         result = c.fetchone()
         conn.close()
         if result:
@@ -218,8 +184,31 @@ class LelangForm(QWidget):
 
         QMessageBox.information(self, "Export Sukses", "Data berhasil diekspor ke 'jadwal_lelang_export.csv'")
 
+    def export_and_push(self):
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute(f"SELECT pejabat_lelang, tanggal, pemohon FROM {TABLE_NAME} ORDER BY tanggal DESC, pejabat_lelang ASC")
+        rows = c.fetchall()
+        conn.close()
+
+        result = {
+            "judul": "Jadwal Lelang Oleh Pejabat Lelang Kelas II - SJB",
+            "data": [{"pejabat_lelang": row[0], "tanggal": row[1], "pemohon": row[2]} for row in rows]
+        }
+
+        os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+
+        try:
+            subprocess.run(['git', 'add', OUTPUT_FILE], check=True)
+            subprocess.run(['git', 'commit', '-m', 'Manual Export & Push from Form'], check=True)
+            subprocess.run(['git', 'push'], check=True)
+            QMessageBox.information(self, "Export Sukses", "Data berhasil diekspor dan dipush ke GitHub!")
+        except subprocess.CalledProcessError as e:
+            QMessageBox.warning(self, "Git Error", f"Gagal push ke GitHub:\n{e}")
+
 if __name__ == '__main__':
-    init_db()
     app = QApplication(sys.argv)
     form = LelangForm()
     form.show()

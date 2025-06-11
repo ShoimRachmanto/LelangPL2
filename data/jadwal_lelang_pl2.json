@@ -2,6 +2,26 @@
   "judul": "Jadwal Lelang Oleh Pejabat Lelang Kelas II - SJB",
   "data": [
     {
+      "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
+      "tanggal": "2025-06-25",
+      "pemohon": "PT Balai Lelang Tribik"
+    },
+    {
+      "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
+      "tanggal": "2025-06-24",
+      "pemohon": "PT JBA Indonesia"
+    },
+    {
+      "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
+      "tanggal": "2025-06-18",
+      "pemohon": "PT Balai Lelang Tribik"
+    },
+    {
+      "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
+      "tanggal": "2025-06-17",
+      "pemohon": "PT JBA Indonesia"
+    },
+    {
       "pejabat_lelang": "Dewi Octalia Boru Gurning, S.E.",
       "tanggal": "2025-06-16",
       "pemohon": "PT Balai Lelang Asta Nara Jaya"
@@ -20,6 +40,11 @@
       "pejabat_lelang": "Noviarina Habibah, S.H.",
       "tanggal": "2025-06-12",
       "pemohon": "PT Anugerah Lelang Indonesia"
+    },
+    {
+      "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
+      "tanggal": "2025-06-11",
+      "pemohon": "PT Balai Lelang Tribik"
     },
     {
       "pejabat_lelang": "Noviarina Habibah, S.H.",

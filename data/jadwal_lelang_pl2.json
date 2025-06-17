@@ -2,6 +2,36 @@
   "judul": "Jadwal Lelang Oleh Pejabat Lelang Kelas II - SJB",
   "data": [
     {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-09-16",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-09-01",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-08-18",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-08-01",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-07-16",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-07-01",
+      "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
       "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
       "tanggal": "2025-06-25",
       "pemohon": "PT Balai Lelang Tribik"
@@ -25,6 +55,11 @@
       "pejabat_lelang": "Dewi Octalia Boru Gurning, S.E.",
       "tanggal": "2025-06-16",
       "pemohon": "PT Balai Lelang Asta Nara Jaya"
+    },
+    {
+      "pejabat_lelang": "Shelvita Andriani, S.H.",
+      "tanggal": "2025-06-16",
+      "pemohon": "PT Digital Sarana Legoas"
     },
     {
       "pejabat_lelang": "Shelvita Andriani, S.H.",
@@ -125,6 +160,11 @@
       "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
       "tanggal": "2025-05-20",
       "pemohon": "PT JBA Indonesia"
+    },
+    {
+      "pejabat_lelang": "Juhaidi, S.H.",
+      "tanggal": "2025-05-19",
+      "pemohon": "PT Balai Lelang Astria"
     },
     {
       "pejabat_lelang": "Noviarina Habibah, S.H.",

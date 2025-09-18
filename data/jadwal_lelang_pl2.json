@@ -2,9 +2,34 @@
   "judul": "Jadwal Lelang Oleh Pejabat Lelang Kelas II - SJB",
   "data": [
     {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-30",
+      "pemohon": "PT Niskala Lelang Sejahtera"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-26",
+      "pemohon": "PT Niskala Lelang Sejahtera"
+    },
+    {
       "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
       "tanggal": "2025-09-24",
       "pemohon": "PT Balai Lelang Tribik"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-23",
+      "pemohon": "PT Niskala Lelang Sejahtera"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-19",
+      "pemohon": "PT Niskala Lelang Sejahtera"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-19",
+      "pemohon": "PT Niskala Lelang Sejahtera"
     },
     {
       "pejabat_lelang": "Vusvytha Arie Yanni, S.H., M.Kn.",
@@ -15,6 +40,11 @@
       "pejabat_lelang": "Shelvita Andriani, S.H.",
       "tanggal": "2025-09-16",
       "pemohon": "PT Digital Sarana Legoas"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-16",
+      "pemohon": "PT Niskala Lelang Sejahtera"
     },
     {
       "pejabat_lelang": "Noviarina Habibah, S.H.",
@@ -32,6 +62,11 @@
       "pemohon": "PT Anugerah Lelang Indonesia"
     },
     {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-10",
+      "pemohon": "PT Niskala Lelang Sejahtera"
+    },
+    {
       "pejabat_lelang": "Noviarina Habibah, S.H.",
       "tanggal": "2025-09-09",
       "pemohon": "PT JBA Indonesia"
@@ -45,6 +80,11 @@
       "pejabat_lelang": "Noviarina Habibah, S.H.",
       "tanggal": "2025-09-04",
       "pemohon": "PT Balai Lelang Caready"
+    },
+    {
+      "pejabat_lelang": "Tiara Aulia Melinda, S.E.",
+      "tanggal": "2025-09-02",
+      "pemohon": "PT Niskala Lelang Sejahtera"
     },
     {
       "pejabat_lelang": "Noviarina Habibah, S.H.",
